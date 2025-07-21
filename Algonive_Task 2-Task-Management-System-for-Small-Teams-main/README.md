@@ -1,0 +1,1 @@
+A collaborative web-based Task Management System for small teams. Built with HTML, CSS, and JavaScript, it includes features like user login, task assignment, status updates, and deadline reminders perfect for startups and group projects.

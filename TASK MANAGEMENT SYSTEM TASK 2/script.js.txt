@@ -1,0 +1,49 @@
+const form = document.getElementById("task-form");
+const taskList = document.getElementById("task-list");
+
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function renderTasks() {
+  taskList.innerHTML = "";
+  tasks.forEach((task, index) => {
+    const div = document.createElement("div");
+    div.className = `task ${task.status === "Completed" ? "completed" : ""}`;
+    div.innerHTML = `
+      <h3>${task.title}</h3>
+      <p>${task.description}</p>
+      <p><strong>Assigned To:</strong> ${task.assignee}</p>
+      <p><strong>Deadline:</strong> ${task.deadline}</p>
+      <p><strong>Status:</strong> ${task.status}</p>
+      <button class="status-btn" onclick="toggleStatus(${index})">
+        Mark as ${task.status === "Pending" ? "Completed" : "Pending"}
+      </button>
+    `;
+    taskList.appendChild(div);
+  });
+}
+
+function toggleStatus(index) {
+  tasks[index].status = tasks[index].status === "Pending" ? "Completed" : "Pending";
+  saveTasks();
+  renderTasks();
+}
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const title = document.getElementById("title").value;
+  const description = document.getElementById("description").value;
+  const deadline = document.getElementById("deadline").value;
+  const assignee = document.getElementById("assignee").value;
+
+  tasks.push({ title, description, deadline, assignee, status: "Pending" });
+  saveTasks();
+  renderTasks();
+  form.reset();
+});
+
+// Initial render
+renderTasks();
